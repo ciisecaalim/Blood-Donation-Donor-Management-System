@@ -1,12 +1,12 @@
-spring:
-  application:
-    name: backend
-
-  datasource:
-    url: jdbc:postgresql://localhost:5432/Blood Donation & Donor Management System
-    username: postgres
-    password: Ahmed@@99
-    driver-class-name: org.postgresql.Driver
-
-server:
-  port: 8080
+#spring:
+#  application:
+#    name: backend
+#
+#  datasource:
+#    url: jdbc:postgresql://localhost:5432/Blood Donation & Donor Management System
+#    username: postgres
+#    password:
+#    driver-class-name: org.postgresql.Driver
+#
+#server:
+#  port: 8080

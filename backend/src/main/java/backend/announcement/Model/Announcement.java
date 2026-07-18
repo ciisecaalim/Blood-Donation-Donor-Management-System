@@ -1,4 +1,4 @@
-package backend.announcement.entity;
+package backend.announcement.Model;
 
 import backend.category.entity.BloodCategory;
 import backend.common.enums.AnnouncementStatus;

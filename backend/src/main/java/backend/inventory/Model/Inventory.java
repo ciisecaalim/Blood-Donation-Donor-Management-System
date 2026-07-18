@@ -1,4 +1,4 @@
-package backend.inventory.entity;
+package backend.inventory.Model;
 
 import backend.category.entity.BloodCategory;
 import backend.common.enums.InventoryStatus;

@@ -1,4 +1,4 @@
-package backend.donor.entity;
+package backend.donor.Model;
 
 import backend.category.entity.BloodCategory;
 import backend.common.enums.DonorStatus;

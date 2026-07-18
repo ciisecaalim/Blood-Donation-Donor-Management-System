@@ -1,7 +1,7 @@
 package backend.inventory.repository;
 
 import backend.category.entity.BloodCategory;
-import backend.inventory.entity.Inventory;
+import backend.inventory.Model.Inventory;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

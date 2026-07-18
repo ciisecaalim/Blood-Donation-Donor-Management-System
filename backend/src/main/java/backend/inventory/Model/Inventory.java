@@ -1,6 +1,6 @@
-package backend.inventory.entity;
+package backend.inventory.Model;
 
-import backend.category.entity.BloodCategory;
+import backend.category.Model.BloodCategory;
 import backend.common.enums.InventoryStatus;
 import jakarta.persistence.*;
 import lombok.*;

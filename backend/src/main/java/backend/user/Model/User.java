@@ -1,4 +1,4 @@
-package backend.user.entity;
+package backend.user.Model;
 
 import backend.common.enums.UserRole;
 import backend.common.enums.UserStatus;
@@ -7,8 +7,7 @@ import lombok.*;
 
 @Entity
 @Table(name = "users")
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -31,6 +30,7 @@ public class User {
     @Column(nullable = false, length = 20)
     private UserRole role;
 
+    @Builder.Default
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
     private UserStatus status = UserStatus.ACTIVE;

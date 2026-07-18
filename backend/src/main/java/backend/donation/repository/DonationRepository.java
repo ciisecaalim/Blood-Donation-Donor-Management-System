@@ -1,8 +1,8 @@
 package backend.donation.repository;
 
 import backend.common.enums.DonationStatus;
-import backend.donation.entity.Donation;
-import backend.donor.entity.Donor;
+import backend.donation.Model.Donation;
+import backend.donor.Model.Donor;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.time.LocalDate;

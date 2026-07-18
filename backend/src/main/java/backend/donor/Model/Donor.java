@@ -1,9 +1,9 @@
-package backend.donor.entity;
+package backend.donor.Model;
 
-import backend.category.entity.BloodCategory;
+import backend.category.Model.BloodCategory;
 import backend.common.enums.DonorStatus;
 import backend.common.enums.Gender;
-import backend.user.entity.User;
+import backend.user.Model.User;
 import jakarta.persistence.*;
 import lombok.*;
 

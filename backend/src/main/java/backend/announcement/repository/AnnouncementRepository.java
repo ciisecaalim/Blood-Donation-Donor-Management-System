@@ -1,6 +1,6 @@
 package backend.announcement.repository;
 
-import backend.announcement.entity.Announcement;
+import backend.announcement.Model.Announcement;
 import backend.common.enums.AnnouncementStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 

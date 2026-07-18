@@ -1,7 +1,7 @@
 package backend.donor.repository;
 
-import backend.donor.entity.Donor;
-import backend.user.entity.User;
+import backend.donor.Model.Donor;
+import backend.user.Model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

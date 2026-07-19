@@ -1,6 +1,6 @@
 package backend.inventory.service;
 
-import backend.category.entity.BloodCategory;
+import backend.category.Model.BloodCategory;
 import backend.category.repository.CategoryRepository;
 import backend.common.enums.InventoryStatus;
 import backend.inventory.Model.Inventory;
@@ -9,6 +9,8 @@ import backend.inventory.request.InventoryRequest;
 import backend.inventory.request.InventoryUpdateRequest;
 import backend.inventory.response.InventoryResponse;
 import org.springframework.stereotype.Service;
+import backend.exception.DuplicateResourceException;
+import backend.exception.ResourceNotFoundException;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -45,7 +47,7 @@ public class InventoryService {
 
         Inventory inventory = inventoryRepository.findById(id)
                 .orElseThrow(() ->
-                        new RuntimeException("Inventory not found")
+                        new ResourceNotFoundException("Inventory not found")
                 );
 
         return mapToResponse(inventory);
@@ -57,12 +59,12 @@ public class InventoryService {
 
         BloodCategory category = categoryRepository.findById(request.getCategoryId())
                 .orElseThrow(() ->
-                        new RuntimeException("Blood category not found")
+                        new ResourceNotFoundException("Blood category not found")
                 );
 
 
         if (inventoryRepository.existsByCategory(category)) {
-            throw new RuntimeException(
+            throw new DuplicateResourceException(
                     "Inventory already exists for this blood category"
             );
         }
@@ -91,7 +93,7 @@ public class InventoryService {
 
         Inventory inventory = inventoryRepository.findById(id)
                 .orElseThrow(() ->
-                        new RuntimeException("Inventory not found")
+                        new ResourceNotFoundException("Inventory not found")
                 );
 
 
@@ -116,7 +118,7 @@ public class InventoryService {
 
         Inventory inventory = inventoryRepository.findById(id)
                 .orElseThrow(() ->
-                        new RuntimeException("Inventory not found")
+                        new ResourceNotFoundException("Inventory not found")
                 );
 
         inventoryRepository.delete(inventory);

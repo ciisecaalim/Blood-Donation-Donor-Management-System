@@ -1,7 +1,7 @@
 package backend.donation.service;
 
 
-import backend.category.entity.BloodCategory;
+import backend.category.Model.BloodCategory;
 import backend.category.repository.CategoryRepository;
 import backend.donation.Model.Donation;
 import backend.donation.repository.DonationRepository;
@@ -12,6 +12,7 @@ import backend.donor.Model.Donor;
 import backend.donor.repository.DonorRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import backend.exception.ResourceNotFoundException;
 
 import java.util.List;
 
@@ -47,13 +48,13 @@ public class DonationService {
 
         Donor donor = donorRepository.findById(request.getDonorId())
                 .orElseThrow(() ->
-                        new RuntimeException("Donor not found")
+                        new ResourceNotFoundException("Donor not found")
                 );
 
 
         BloodCategory category = categoryRepository.findById(request.getCategoryId())
                 .orElseThrow(() ->
-                        new RuntimeException("Blood category not found")
+                        new ResourceNotFoundException("Blood category not found")
                 );
 
 
@@ -96,7 +97,7 @@ public class DonationService {
 
         Donation donation = donationRepository.findById(id)
                 .orElseThrow(() ->
-                        new RuntimeException("Donation not found")
+                        new ResourceNotFoundException("Donation not found")
                 );
 
 
@@ -117,7 +118,7 @@ public class DonationService {
 
         Donation donation = donationRepository.findById(id)
                 .orElseThrow(() ->
-                        new RuntimeException("Donation not found")
+                        new ResourceNotFoundException("Donation not found")
                 );
 
 
@@ -144,7 +145,7 @@ public class DonationService {
 
         Donation donation = donationRepository.findById(id)
                 .orElseThrow(() ->
-                        new RuntimeException("Donation not found")
+                        new ResourceNotFoundException("Donation not found")
                 );
 
 

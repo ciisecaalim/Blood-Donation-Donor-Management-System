@@ -1,19 +1,21 @@
 package backend.donor.service;
 
 
-import backend.category.entity.BloodCategory;
+import backend.category.Model.BloodCategory;
 import backend.category.repository.CategoryRepository;
 import backend.common.enums.DonorStatus;
 import backend.donor.Model.Donor;
 import backend.donor.repository.DonorRepository;
 import backend.donor.request.CreateDonorRequest;
 import backend.donor.response.DonorResponse;
-import backend.user.entity.User;
+import backend.user.Model.User;
+
 import backend.user.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import backend.donor.request.DonorUpdateRequest;
+import backend.exception.DuplicateResourceException;
+import backend.exception.ResourceNotFoundException;
 
 import java.util.List;
 
@@ -49,19 +51,21 @@ public class DonorService {
 
         User user = userRepository.findById(request.getUserId())
                 .orElseThrow(() ->
-                        new RuntimeException("User not found")
+                        new ResourceNotFoundException("User not found")
                 );
 
 
         if (donorRepository.existsByUser(user)) {
-            throw new RuntimeException("User already has donor profile");
+            throw new DuplicateResourceException(
+                    "User already has donor profile"
+            );
         }
 
 
 
         BloodCategory category = categoryRepository.findById(request.getCategoryId())
                 .orElseThrow(() ->
-                        new RuntimeException("Blood category not found")
+                        new ResourceNotFoundException("Blood category not found")
                 );
 
 
@@ -110,7 +114,7 @@ public class DonorService {
 
         Donor donor = donorRepository.findById(id)
                 .orElseThrow(() ->
-                        new RuntimeException("Donor not found")
+                        new ResourceNotFoundException("Donor not found")
                 );
 
 
@@ -127,7 +131,7 @@ public class DonorService {
 
         Donor donor = donorRepository.findById(id)
                 .orElseThrow(() ->
-                        new RuntimeException("Donor not found")
+                        new ResourceNotFoundException("Donor not found")
                 );
 
 
@@ -158,7 +162,7 @@ public class DonorService {
 
         Donor donor = donorRepository.findById(id)
                 .orElseThrow(() ->
-                        new RuntimeException("Donor not found")
+                        new ResourceNotFoundException("Donor not found")
                 );
 
 

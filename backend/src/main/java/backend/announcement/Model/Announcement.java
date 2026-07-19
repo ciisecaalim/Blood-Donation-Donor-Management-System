@@ -1,6 +1,6 @@
 package backend.announcement.Model;
 
-import backend.category.entity.BloodCategory;
+import backend.category.Model.BloodCategory;
 import backend.common.enums.AnnouncementStatus;
 import backend.common.enums.UrgencyLevel;
 import jakarta.persistence.*;

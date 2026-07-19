@@ -6,11 +6,12 @@ import backend.announcement.repository.AnnouncementRepository;
 import backend.announcement.request.AnnouncementUpdateRequest;
 import backend.announcement.request.CreateAnnouncementRequest;
 import backend.announcement.response.AnnouncementResponse;
-import backend.category.entity.BloodCategory;
+import backend.category.Model.BloodCategory;
 import backend.category.repository.CategoryRepository;
 import backend.common.enums.AnnouncementStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import backend.exception.ResourceNotFoundException;
 
 import java.util.List;
 
@@ -46,7 +47,7 @@ public class AnnouncementService {
 
         BloodCategory category = categoryRepository.findById(request.getCategoryId())
                 .orElseThrow(() ->
-                        new RuntimeException("Blood category not found")
+                        new ResourceNotFoundException("Blood category not found")
                 );
 
 
@@ -95,7 +96,7 @@ public class AnnouncementService {
         Announcement announcement =
                 announcementRepository.findById(id)
                         .orElseThrow(() ->
-                                new RuntimeException("Announcement not found")
+                                new ResourceNotFoundException("Announcement not found")
                         );
 
 
@@ -129,7 +130,7 @@ public class AnnouncementService {
         Announcement announcement =
                 announcementRepository.findById(id)
                         .orElseThrow(() ->
-                                new RuntimeException("Announcement not found")
+                                new ResourceNotFoundException("Announcement not found")
                         );
 
 
@@ -171,7 +172,7 @@ public class AnnouncementService {
         Announcement announcement =
                 announcementRepository.findById(id)
                         .orElseThrow(() ->
-                                new RuntimeException("Announcement not found")
+                                new ResourceNotFoundException("Announcement not found")
                         );
 
 

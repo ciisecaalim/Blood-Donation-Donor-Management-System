@@ -5,18 +5,26 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import org.springframework.security.config.Customizer;
+import org.springframework.http.HttpMethod;
+
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 
 import org.springframework.security.config.http.SessionCreationPolicy;
+
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
@@ -24,20 +32,97 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    /*
+     * JWT authentication filter.
+     */
+    private final JwtAuthenticationFilter
+            jwtAuthenticationFilter;
 
-    /**
-     * Password-ka user-ka wuxuu u beddelayaa BCrypt hash.
-     *
-     * Bean-kan ayaa xallinaya error-ka:
-     * No qualifying bean of type PasswordEncoder.
+    /*
+     * Password-ka user-ka BCrypt hash
+     * ayuu ka dhigayaa.
      */
     @Bean
     public PasswordEncoder passwordEncoder() {
+
         return new BCryptPasswordEncoder();
     }
 
-    /**
+    /*
+     * CORS configuration.
+     *
+     * Waxay React frontend-ka localhost:5173
+     * u oggolaanaysaa inuu backend-ka
+     * localhost:8070 request u diro.
+     */
+    @Bean
+    public CorsConfigurationSource
+    corsConfigurationSource() {
+
+        CorsConfiguration configuration =
+                new CorsConfiguration();
+
+        /*
+         * Frontend origin-ka la oggol yahay.
+         */
+        configuration.setAllowedOrigins(
+                List.of(
+                        "http://localhost:5173"
+                )
+        );
+
+        /*
+         * HTTP methods-ka la oggol yahay.
+         */
+        configuration.setAllowedMethods(
+                List.of(
+                        "GET",
+                        "POST",
+                        "PUT",
+                        "PATCH",
+                        "DELETE",
+                        "OPTIONS"
+                )
+        );
+
+        /*
+         * Headers-ka React frontend-ku
+         * backend-ka u diri karo.
+         */
+        configuration.setAllowedHeaders(
+                List.of(
+                        "Authorization",
+                        "Content-Type",
+                        "Accept"
+                )
+        );
+
+        /*
+         * Browser-ka wuxuu akhrisan karaa
+         * Authorization header haddii loo baahdo.
+         */
+        configuration.setExposedHeaders(
+                List.of(
+                        "Authorization"
+                )
+        );
+
+        UrlBasedCorsConfigurationSource source =
+                new UrlBasedCorsConfigurationSource();
+
+        /*
+         * CORS rules-ka ku dabaq
+         * dhammaan backend endpoints-ka.
+         */
+        source.registerCorsConfiguration(
+                "/**",
+                configuration
+        );
+
+        return source;
+    }
+
+    /*
      * Security rules-ka application-ka.
      */
     @Bean
@@ -47,20 +132,23 @@ public class SecurityConfig {
 
         http
                 /*
-                 * JWT system-ku session ma isticmaalo,
-                 * sidaas darteed CSRF waa la daminayaa.
+                 * JWT session ma isticmaalo.
                  */
-                .csrf(AbstractHttpConfigurer::disable)
+                .csrf(
+                        AbstractHttpConfigurer::disable
+                )
 
                 /*
-                 * Waxay u diyaarinaysaa backend-ka
-                 * requests-ka frontend-ka React.
+                 * Isticmaal CORS configuration-ka sare.
                  */
-                .cors(Customizer.withDefaults())
+                .cors(cors ->
+                        cors.configurationSource(
+                                corsConfigurationSource()
+                        )
+                )
 
                 /*
-                 * Server-ku user session ma kaydinayo.
-                 * Request kasta JWT token ayuu wataa.
+                 * Server-ku session ma kaydinayo.
                  */
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(
@@ -69,13 +157,34 @@ public class SecurityConfig {
                 )
 
                 /*
-                 * Register iyo login waa public.
-                 * Endpoint-yada kale JWT ayay u baahan yihiin.
+                 * Public iyo protected endpoints.
                  */
                 .authorizeHttpRequests(authorize ->
                         authorize
+
+                                /*
+                                 * Browser preflight request.
+                                 */
                                 .requestMatchers(
-                                        "/api/auth/register",
+                                        HttpMethod.OPTIONS,
+                                        "/**"
+                                )
+                                .permitAll()
+
+                                /*
+                                 * Register waa public.
+                                 */
+                                .requestMatchers(
+                                        HttpMethod.POST,
+                                        "/api/auth/register"
+                                )
+                                .permitAll()
+
+                                /*
+                                 * Login waa public.
+                                 */
+                                .requestMatchers(
+                                        HttpMethod.POST,
                                         "/api/auth/login"
                                 )
                                 .permitAll()
@@ -88,15 +197,15 @@ public class SecurityConfig {
 
                                 /*
                                  * Endpoint kasta oo kale
-                                 * user login sameeyay ayuu rabaa.
+                                 * JWT ayuu u baahan yahay.
                                  */
                                 .anyRequest()
                                 .authenticated()
                 )
 
                 /*
-                 * JWT filter-ka waxaa la ordiyaa ka hor
-                 * username/password filter-ka Spring Security.
+                 * JWT filter-ka ka hor mari
+                 * Spring Security default filter.
                  */
                 .addFilterBefore(
                         jwtAuthenticationFilter,

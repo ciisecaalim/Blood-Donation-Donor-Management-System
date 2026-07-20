@@ -1,51 +1,42 @@
 package backend.report.controller;
 
-
-import backend.report.response.BloodGroupReportResponse;
-import backend.report.response.ReportResponse;
+import backend.report.response.SystemReportResponse;
 import backend.report.service.ReportService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-
-
+/*
+ * Controller-ka complete system report.
+ */
 @RestController
-@RequestMapping("/api/report")
+@RequestMapping("/api/reports")
+@RequiredArgsConstructor
 public class ReportController {
 
-
+    /*
+     * Service-ka diyaarinaya complete system report-ka.
+     */
     private final ReportService reportService;
 
+    /*
+     * ADMIN ONLY:
+     *
+     * Soo saar complete system report.
+     *
+     * GET /api/reports/system
+     */
+    @GetMapping("/system")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<SystemReportResponse>
+    getCompleteSystemReport() {
 
-    public ReportController(ReportService reportService) {
+        SystemReportResponse report =
+                reportService.getCompleteSystemReport();
 
-        this.reportService = reportService;
-
+        return ResponseEntity.ok(report);
     }
-
-
-
-    // Summary report
-    @GetMapping
-    public ResponseEntity<ReportResponse> getReport() {
-
-        return ResponseEntity.ok(
-                reportService.getReport()
-        );
-
-    }
-
-
-
-    // Blood group report
-    @GetMapping("/blood-groups")
-    public ResponseEntity<List<BloodGroupReportResponse>> getBloodGroupReport() {
-
-        return ResponseEntity.ok(
-                reportService.getBloodGroupReport()
-        );
-
-    }
-
 }

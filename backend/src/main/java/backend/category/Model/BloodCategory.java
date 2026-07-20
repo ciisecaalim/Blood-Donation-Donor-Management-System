@@ -15,10 +15,25 @@ import java.time.LocalDateTime;
 @Builder
 public class BloodCategory {
 
+    /*
+     * Primary key-ga blood category-ga.
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    /*
+     * Blood group-ka:
+     *
+     * A+
+     * A-
+     * B+
+     * B-
+     * AB+
+     * AB-
+     * O+
+     * O-
+     */
     @Column(
             name = "blood_group",
             nullable = false,
@@ -27,14 +42,27 @@ public class BloodCategory {
     )
     private String bloodGroup;
 
-    @Column(length = 150)
+    /*
+     * Faahfaahinta blood category-ga.
+     */
+    @Column(length = 255)
     private String description;
 
+    /*
+     * Status-ka category-ga.
+     *
+     * Category cusub wuxuu default ahaan
+     * noqonayaa ACTIVE.
+     */
     @Builder.Default
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
-    private CategoryStatus status = CategoryStatus.ACTIVE;
+    private CategoryStatus status =
+            CategoryStatus.ACTIVE;
 
+    /*
+     * Waqtiga category-ga la sameeyay.
+     */
     @Column(
             name = "created_at",
             nullable = false,
@@ -42,6 +70,10 @@ public class BloodCategory {
     )
     private LocalDateTime createdAt;
 
+    /*
+     * Waxaa la ordiyaa ka hor inta category-ga
+     * database-ka markii ugu horreysay lagu kaydin.
+     */
     @PrePersist
     public void onCreate() {
 

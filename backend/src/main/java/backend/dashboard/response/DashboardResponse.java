@@ -1,27 +1,29 @@
 package backend.dashboard.response;
 
-
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
-
+import lombok.NoArgsConstructor;
 
 @Getter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class DashboardResponse {
-
 
     private long totalDonors;
 
-    private long totalBloodRequests;
+    private long totalDonations;
 
     private long totalBloodUnits;
 
+    private long totalAnnouncements;
 
-    public DashboardResponse(long totalDonors,
-                             long totalBloodRequests,
-                             long totalBloodUnits) {
+    private long activeAnnouncements;
 
-        this.totalDonors = totalDonors;
-        this.totalBloodRequests = totalBloodRequests;
-        this.totalBloodUnits = totalBloodUnits;
-    }
+    private long availableGroups;
 
+    private long lowStockGroups;
+
+    private long outOfStockGroups;
 }

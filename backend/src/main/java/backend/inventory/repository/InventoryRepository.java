@@ -1,35 +1,54 @@
 package backend.inventory.repository;
 
-import backend.inventory.Model.Inventory;
 import backend.category.Model.BloodCategory;
-import backend.report.response.BloodGroupReportResponse;
+import backend.common.enums.InventoryStatus;
+import backend.inventory.Model.Inventory;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-import java.util.List;
 import java.util.Optional;
 
-public interface InventoryRepository extends JpaRepository<Inventory, Long> {
+public interface InventoryRepository
+        extends JpaRepository<Inventory, Long> {
 
+    /*
+     * Hubi in blood category-ga loo sameeyay
+     * inventory record hore.
+     */
+    boolean existsByCategory(
+            BloodCategory category
+    );
 
-    Optional<Inventory> findByCategory(BloodCategory category);
+    /*
+     * Soo hel inventory record-ka
+     * blood category gaar ah.
+     */
+    Optional<Inventory> findByCategory(
+            BloodCategory category
+    );
 
+    /*
+     * Tiri inventory records-ka leh status gaar ah.
+     *
+     * Tusaale:
+     * AVAILABLE
+     * LOW_STOCK
+     * OUT_OF_STOCK
+     */
+    long countByStatus(
+            InventoryStatus status
+    );
 
-    boolean existsByCategory(BloodCategory category);
-
-
-    @Query("SELECT COALESCE(SUM(i.quantity),0) FROM Inventory i")
-    Long sumBloodUnits();
-
-
+    /*
+     * Isku dar quantity-ga dhammaan
+     * inventory records-ka.
+     *
+     * COALESCE wuxuu soo celinayaa 0
+     * haddii inventory table-ku madhan yahay.
+     */
     @Query("""
-           SELECT new backend.report.response.BloodGroupReportResponse(
-           i.category.bloodGroup,
-           SUM(i.quantity)
-           )
-           FROM Inventory i
-           GROUP BY i.category.bloodGroup
-           """)
-    List<BloodGroupReportResponse> getBloodGroupReport();
-
+            SELECT COALESCE(SUM(i.quantity), 0)
+            FROM Inventory i
+            """)
+    Long sumBloodUnits();
 }
